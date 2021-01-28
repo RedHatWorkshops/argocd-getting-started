@@ -22,3 +22,5 @@ To install it via the UI you simply...
 * Select the `Argo CD` card (Note, that, this is a community supported operator).
 * Click on `Continue` on the 'Show Community Operator' information notification.
 * Click `Install` on the `Argo CD` installation dialog.
+
+Another 
