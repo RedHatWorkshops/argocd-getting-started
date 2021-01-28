@@ -218,3 +218,7 @@ oc apply -k https://github.com/RedHatWorkshops/argocd-getting-started/resources/
 This should create the `bgdk-app` in the ArgoCD UI.
 
 ![bgdk-app](resources/images/bgdk-app.png)
+
+Clicking on this takes you to the overview page. You may see it as still progressing or full synced. 
+
+![synced-app](resources/images/synced-app.png)
