@@ -179,7 +179,7 @@ spec:
   source:
     path: resources/manifests/bgdk-yaml
     repoURL: https://github.com/RedHatWorkshops/argocd-getting-started
-    targetRevision: master
+    targetRevision: main
   syncPolicy:
     automated:
       prune: true
@@ -192,7 +192,7 @@ spec:
       source:
         path: resources/manifests/bgdk-yaml
         repoURL: https://github.com/RedHatWorkshops/argocd-getting-started
-        targetRevision: master
+        targetRevision: main
 ```
 
 Let's break this down a bit.
