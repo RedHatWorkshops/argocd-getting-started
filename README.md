@@ -247,7 +247,7 @@ NAME                           HOST/PORT                                PATH   S
 route.route.openshift.io/bgd   bgd-bgd.apps.example.com          bgd        8080                 None
 ```
 
-Your output slightly different.
+Your output will be slightly different.
 
 Visit your application by running the following to get the URL:
 
