@@ -208,3 +208,7 @@ The `Application` CR (`CustomResource`) can be applied using [this repo](resourc
 ```shell
 oc apply -k https://github.com/RedHatWorkshops/argocd-getting-started/resources/manifests/bgdk-app
 ```
+
+This should create the `bgdk-app` in the ArgoCD UI.
+
+![bgdk-app](resources/images/bgdk-app.png)
