@@ -23,4 +23,16 @@ To install it via the UI you simply...
 * Click on `Continue` on the 'Show Community Operator' information notification.
 * Click `Install` on the `Argo CD` installation dialog.
 
-Another 
+Another way to do this is to use the manifest directly. You can use the
+resources in this repo to install the ArgoCD Operator:
+
+```shell
+oc apply -k https://github.com/RedHatWorkshops/argocd-getting-started/resources/manifests/argocd-operator-install
+```
+
+This uses [kustomize](https://kustomize.io/) to load the manifests needed
+to install the Argo CD Operators. These 3 are:
+
+* [argocd-namespace.yaml](resources/manifests/argocd-operator-install/argocd-namespace.yaml)
+* [argocd-operatorgroup.yaml](resources/manifests/argocd-operator-install/argocd-operatorgroup.yaml)
+* [argocd-subscription.yaml](resources/manifests/argocd-operator-install/argocd-subscription.yaml)
