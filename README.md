@@ -7,6 +7,12 @@ that takes you through the following steps:
 * [Installing an ArgoCD Instance](#installing-an-argocd-instance)
 * [Deploying A Sample Application](#deploying-a-sample-application)
 
+The idea of this guide is that it should work on ANY OpenShift 4.6+
+cluster. So you'll need an OpenShift cluster or CRC. You will also
+need the `oc` cli utility.
+
+
+> :heavy_exclamation_mark: **NOTE** This won't work on a disconnected cluster.
 
 # Installing the ArgoCD Operator
 
