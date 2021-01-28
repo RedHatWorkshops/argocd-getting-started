@@ -252,3 +252,34 @@ oc get route bgd -n bgd -o jsonpath='{.spec.host}{"\n"}'
 Your application should look like this.
 
 ![bgd](resources/images/bgd.png)
+
+Let's introduce a change! Patch the live manifest to change the color
+of the box from blue to green:
+
+```shell
+oc -n bgd patch deploy/bgd --type='json' \
+-p='[{"op": "replace", "path": "/spec/template/spec/containers/0/env/0/value", "value":"green"}]'
+```
+
+If you quickly (I'm not kidding, you have to be lightning fast or you'll
+miss it) look at the screen you'll see it out of sync:
+
+![outofsync](resources/images/out-of-sync.png)
+
+But ArgoCD sees that difference and changes it back to the desired
+state. Preventing drift.
+
+![fullysynced](resources/images/fullysynced.png)
+
+> :bulb: **NOTE**: If you're having touble catching the sync. Run your browser window and terminal window side-by-side. This is a good thing, that Argo acts so quickly. :smiley:
+
+# Conclusion
+
+As you can see, you can use ArgoCD to deploy you application and hinder
+platform drift. This isn't only applicable to applications, but to other
+cluster resources as well (e.g MachineSets, Authentication, AutoScaling,
+etc).
+
+This was a smiple demo that should get your feet wet in using
+ArgoCD. There are more demos and videos that you can find on
+[demo.openshift.com](https://demo.openshift.com/en/dev/argocd/)
