@@ -132,6 +132,12 @@ argocd-repo-server-5454d6c459-sltk2              1/1     Running   0          80
 argocd-server-5d998f7668-qn62f                   1/1     Running   0          80m
 ```
 
+It may  take a while for these to rollout so you can wait for this by running:
+
+```
+oc rollout status deployment argocd-operator -n argocd && oc rollout status deployment argocd-server -n argocd
+```
+
 Once installed, get the route for the ArgoCD UI:
 
 ```shell
