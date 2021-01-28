@@ -222,3 +222,33 @@ This should create the `bgdk-app` in the ArgoCD UI.
 Clicking on this takes you to the overview page. You may see it as still progressing or full synced. 
 
 ![synced-app](resources/images/synced-app.png)
+
+> :heavy_exclamation_mark: **NOTE**: You may have to click on `show hidden resources` on this page to see it all
+
+At this point the application should be up and running. You can see
+all the resources created with the `oc get pods,svc,route -n bgd`
+command. The output should look like this:
+
+```
+$ oc get pods,svc,route -n bgd
+NAME                       READY   STATUS    RESTARTS   AGE
+pod/bgd-788cb756f7-kz448   1/1     Running   0          10m
+
+NAME          TYPE        CLUSTER-IP       EXTERNAL-IP   PORT(S)    AGE
+service/bgd   ClusterIP   172.30.111.118   <none>        8080/TCP   10m
+
+NAME                           HOST/PORT                                PATH   SERVICES   PORT   TERMINATION   WILDCARD
+route.route.openshift.io/bgd   bgd-bgd.apps.example.com          bgd        8080                 None
+```
+
+Your output slightly different.
+
+Visit your application by running the following to get the URL:
+
+```shell
+oc get route bgd -n bgd -o jsonpath='{.spec.host}{"\n"}'
+```
+
+Your application should look like this.
+
+![bgd](resources/images/bgd.png)
