@@ -156,8 +156,8 @@ that you can use to test. This is a simple app that includes:
 
 * [A Namespace](resources/manifests/bgdk-yaml/bgd-namespace.yaml)
 * [A Deployment](resources/manifests/bgdk-yaml/bgd-deployment.yaml)
-* [A Service](resources/manifests/bgdk-yaml/bgd-route.yaml)
-* [A Route](resources/manifests/bgdk-yaml/bgd-svc.yaml)
+* [A Service](resources/manifests/bgdk-yaml/bgd-svc.yaml)
+* [A Route](resources/manifests/bgdk-yaml/bgd-route.yaml)
 
 Collectively, this is known as an `Application` within ArgoCD. Therefore,
 you must define it as such in order to apply these manifest in your
