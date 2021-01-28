@@ -1,0 +1,26 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: bgdk-app
+spec:
+  destination:
+    namespace: argocd
+    server: https://kubernetes.default.svc
+  project: default
+  source:
+    path: resources/manifests/bgdk-yaml
+    repoURL: https://github.com/RedHatWorkshops/argocd-getting-started
+    targetRevision: master
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+  sync:
+    comparedTo:
+      destination:
+        namespace: argocd
+        server: https://kubernetes.default.svc
+      source:
+        path: resources/manifests/bgdk-yaml
+        repoURL: https://github.com/RedHatWorkshops/argocd-getting-started
+        targetRevision: master

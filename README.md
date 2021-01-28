@@ -5,7 +5,7 @@ that takes you through the following steps:
 
 * [Installing the ArgoCD Operator](#installing-the-argocd-operator)
 * [Installing an ArgoCD Instance](#installing-an-argocd-instance)
-* Deploying A Sample Application.
+* [Deploying A Sample Application](#deploying-a-sample-application)
 
 
 # Installing the ArgoCD Operator
@@ -148,3 +148,62 @@ Go ahead and click `LOGIN VIA OPENSHIFT`, and login as `kubeadmin`
 You should see this screen:
 
 ![argocd](resources/images/argocd.png)
+
+# Deploying A Sample Application
+
+In [this repo](resources/manifests/bgdk-yaml), we have some manifesets
+that you can use to test. This is a simple app that includes:
+
+* [A Namespace](resources/manifests/bgdk-yaml/bgd-namespace.yaml)
+* [A Deployment](resources/manifests/bgdk-yaml/bgd-deployment.yaml)
+* [A Service](resources/manifests/bgdk-yaml/bgd-route.yaml)
+* [A Route](resources/manifests/bgdk-yaml/bgd-svc.yaml)
+
+Collectively, this is known as an `Application` within ArgoCD. Therefore,
+you must define it as such in order to apply these manifest in your
+cluster.
+
+Here is the `Application` manifest we are going to use:
+
+```yaml
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: bgdk-app
+spec:
+  destination:
+    namespace: argocd
+    server: https://kubernetes.default.svc
+  project: default
+  source:
+    path: resources/manifests/bgdk-yaml
+    repoURL: https://github.com/RedHatWorkshops/argocd-getting-started
+    targetRevision: master
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+  sync:
+    comparedTo:
+      destination:
+        namespace: argocd
+        server: https://kubernetes.default.svc
+      source:
+        path: resources/manifests/bgdk-yaml
+        repoURL: https://github.com/RedHatWorkshops/argocd-getting-started
+        targetRevision: master
+```
+
+Let's break this down a bit.
+
+* ArgoCD's concept of a `Project` is different than OpenShift's. Here you're installing the application in ArgoCD's `default` project (`.spec.project`). **NOT** OpenShift's `default` project.
+* The destination server is the server we installed ArgoCD on (noted as `.spec.destination.server`).
+* The manifest repo where the YAML resides and the path to look for the YAML is under `.spec.source`.
+* The `.spec.syncPolicy` is set to automatically sync the repo.
+* The last section `.spec.sync` just says what are you comparing the repo to. (Basically "Compare the running config to the desired config")
+
+The `Application` CR (`CustomResource`) can be applied using [this repo](resources/manifests/bgdk-app) by running:
+
+```shell
+oc apply -k https://github.com/RedHatWorkshops/argocd-getting-started/resources/manifests/bgdk-app
+```
