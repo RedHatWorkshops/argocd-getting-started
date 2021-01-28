@@ -170,6 +170,7 @@ apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
   name: bgdk-app
+  namespace: argocd
 spec:
   destination:
     namespace: argocd
