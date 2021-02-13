@@ -69,3 +69,49 @@ Although simple, let's break it down a bit.
 Having this in place, we're ready to deploy the application!
 
 # Deploying An App With Kustomize
+
+To deploy this application, you'll have to create an ArgoCD
+[`Application`](../manifests/bgdk-appk/bgdk-appk.yaml).
+
+```yaml
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: bgdk-appk
+  namespace: argocd
+spec:
+  destination:
+    namespace: argocd
+    server: https://kubernetes.default.svc
+  project: default
+  source:
+    path: resources/manifests/bgdk-kustomize
+    repoURL: https://github.com/RedHatWorkshops/argocd-getting-started
+    targetRevision: main
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+  sync:
+    comparedTo:
+      destination:
+        namespace: argocd
+        server: https://kubernetes.default.svc
+      source:
+        path: resources/manifests/bgdk-kustomize
+        repoURL: https://github.com/RedHatWorkshops/argocd-getting-started
+        targetRevision: main
+```
+
+This should look familiar if you went through the [previous
+lab](../../README.md). Here you're specifying where to find the
+YAML. But since Kustommize is built-in to ArgoCD, ArgoCD will see the
+[`kustomize`](../manifests/bgdk-kustomize/kustomization.yaml) file and
+perform a `kustomize build` before applying the manifest. Let's apply
+this manifest.
+
+```shell
+oc apply -k https://github.com/RedHatWorkshops/argocd-getting-started/resources/manifests/bgdk-appk
+```
+
+> :bulb: **NOTE**: You're actually using Kustomize to deploy the app that's using Kustomize! Take a look at [the repo](../manifests/bgdk-appk) to to investigate.
