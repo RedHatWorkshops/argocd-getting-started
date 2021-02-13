@@ -2,7 +2,7 @@
 
 In the [previous lab](../../README.md), you were able to deploy
 some Kubernetes manifests and keep them in sync with your cluster
-using ArgoCD. This is a powerful too, but can lead to a lot of YAML
+using ArgoCD. This is a powerful tool, but can lead to a lot of YAML
 being copied everywhere. In a lot of cases, you'd like to deploy an
 application to multiple places with only minor changes. How
 do you do that without copying YAML everywhere? This is where
