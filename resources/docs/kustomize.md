@@ -18,6 +18,12 @@ In this section we'll be going over:
 * [Creating An App With Kustomize](#creating-an-app-with-kustomize)
 * [Deploying An App With Kustomize](#deploying-an-app-with-kustomize)
 
+If you haven't already, delete the previous application before starting.
+
+```shell
+oc delete -k https://github.com/RedHatWorkshops/argocd-getting-started/resources/manifests/bgdk-app
+```
+
 # Creating An App With Kustomize
 
 In the previous lab, we [deployed a sample
