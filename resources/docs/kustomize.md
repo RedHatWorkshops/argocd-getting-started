@@ -124,3 +124,8 @@ oc apply -k https://github.com/RedHatWorkshops/argocd-getting-started/resources/
 ```
 
 > :bulb: **NOTE**: You're actually using Kustomize to deploy the app that's using Kustomize! That's what the `-k` is in `oc apply`. Take a look at [the repo](../manifests/bgdk-appk) to to investigate further.
+
+If you look at your ArgoCD WebUI, you should see the app fully synced
+after a while.
+
+![syncd-appk](../images/synced-appk.png)
