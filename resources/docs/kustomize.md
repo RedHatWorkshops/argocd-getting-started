@@ -129,3 +129,31 @@ If you look at your ArgoCD WebUI, you should see the app fully synced
 after a while.
 
 ![syncd-appk](../images/synced-appk.png)
+
+Click on the card and look at the overview of your application.
+
+![syncd-appk](../images/appk-overview.png)
+
+You'll see that all the YAML manifest of the other repo was loaded
+in. Cool! You can now see how you can deploy your one application in
+many locations without copying tons of YAML everywhere!
+
+Get the route of the application.
+
+```shell
+oc get route bgd -n bgd -o jsonpath='{.spec.host}{"\n"}'
+```
+
+Visiting the app, you should see a green square.
+
+![green-square](../images/green-square.png)
+
+Success :tada:
+
+# Conclusion
+
+You can now see how you can use Kustomize for deploying applications
+accross many environments. Using Kustomize reduces the amount of YAML
+needed to be copied to every environment by using templeting and patching.
+
+To learn more, read the [official Kustomize documentation](https://kubernetes.io/docs/home/)
