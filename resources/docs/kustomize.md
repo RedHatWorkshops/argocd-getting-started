@@ -114,4 +114,4 @@ this manifest.
 oc apply -k https://github.com/RedHatWorkshops/argocd-getting-started/resources/manifests/bgdk-appk
 ```
 
-> :bulb: **NOTE**: You're actually using Kustomize to deploy the app that's using Kustomize! Take a look at [the repo](../manifests/bgdk-appk) to to investigate.
+> :bulb: **NOTE**: You're actually using Kustomize to deploy the app that's using Kustomize! That's what the `-k` is in `oc apply`. Take a look at [the repo](../manifests/bgdk-appk) to to investigate further.
