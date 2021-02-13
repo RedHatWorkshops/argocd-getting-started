@@ -290,8 +290,8 @@ This was a smiple demo that should get you familiar with using ArgoCD. If
 you'd like to dip your toes in a little more advanced topics, feel free
 to take a look at one of these modules:
 
-* [Working with Kustomize](resources/docs/kustomize.md) **Under Construction**
-* [Syncwaves and Hooks](google.com) **Coming Soon**
+* [Working with Kustomize](resources/docs/kustomize.md)
+* [Syncwaves and Hooks](resources/docs/syncwaves-and-hooks.md) * **Coming Soon** *
 
 There are more demos and videos that you can find on
 [demo.openshift.com](https://demo.openshift.com/en/dev/argocd/)
