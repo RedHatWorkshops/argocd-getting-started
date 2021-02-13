@@ -63,8 +63,8 @@ Let's take a look at the [`bgd-deployment.yaml`](../manifests/bgdk-kustomize/bgd
 
 Although simple, let's break it down a bit.
 
-`op` - stands for operation. Here we are replacing a value.
-`path` - This is the path in the `Deployment`
+* `op` - stands for operation. Here we are replacing a value.
+* `path` - This is the path in the `Deployment`
 manifest that you will replace. In this case the
 [`color`](../manifests/bgdk-yaml/bgd-deployment.yaml#L26-L27) key's
 value will be replaced with "green".
