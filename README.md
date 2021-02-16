@@ -45,7 +45,7 @@ to install the Argo CD Operators. These 3 are:
 
 > :bulb: **NOTE**: You don't have to use `kustomize`. You can `oc apply -f` these files individually
 
-Once you've installed the Operator, you can now install an ArgoCD Instance.
+Once you've installed the Operator, you can now deplay an ArgoCD Instance.
 
 # Installing an ArgoCD Instance
 
