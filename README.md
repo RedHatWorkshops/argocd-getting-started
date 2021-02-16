@@ -107,6 +107,7 @@ spec:
 
 This manifest does some customization to work with OpenShift:
 
+* Creates the ArgoCD instance in the `argocd` namespace.
 * Creates a route (under: `.spec.server.route.enabled`)
 * Uses Dex to allow the mapping of OpenShift groups to ArgoCD groups (under: `.spec.dex`)
 * RBAC mapping of the `system:cluster-admins` OCP group to `role:admin` role in ArgoCD (under: `.spec.rbac`)
