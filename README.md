@@ -53,7 +53,7 @@ Once the Operator is installed, we need to tell it to deploy an instance
 of ArgoCD. First you need to make sure ArgoCD has the ability to
 administer the cluster.
 
-First, you create a `ClusterRoleBinding` that gives the `ServiceAcocunt`
+First, you create a `ClusterRoleBinding` that gives the `ServiceAccount`
 named `argocd-application-controller`, the `cluster-admin`
 `ClusterRole`. This allows ArgoCD to manage the cluster.
 
