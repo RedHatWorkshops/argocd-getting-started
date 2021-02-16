@@ -57,6 +57,8 @@ the resources. In this case, the `Deployment`
 * `patchesJson6902.target.path` - This tells Kustomize that I want to
 use a file to specify what I'm patching.
 
+> :bulb: Learn more about `patchesJson6902` and what other choices you have by visiting the [official documentation page](https://kubectl.docs.kubernetes.io/references/kustomize/kustomization/patchesjson6902/)
+
 Let's take a look at the [`bgd-deployment.yaml`](../manifests/bgdk-kustomize/bgd-deployment.yaml) file.
 
 ```yaml
