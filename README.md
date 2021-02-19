@@ -82,13 +82,14 @@ metadata:
   name: argocd
   namespace: argocd
 spec:
+  version: v1.8.2
   server:
     route:
       enabled: true
   dex:
+    image: ghcr.io/dexidp/dex
     openShiftOAuth: true
-    image: quay.io/redhat-cop/dex
-    version: v2.22.0-openshift
+    version: v2.27.0
   resourceCustomizations: |
     route.openshift.io/Route:
       ignoreDifferences: |
@@ -101,7 +102,7 @@ spec:
     scopes: '[groups]'
   initialRepositories: |
     - name:  argocd-getting-started
-      type: git
+      type: git 
       url: https://github.com/RedHatWorkshops/argocd-getting-started
 ```
 
