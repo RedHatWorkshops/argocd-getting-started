@@ -124,7 +124,9 @@ repo](resources/manifests/argocd-instance) by running:
 oc apply -k https://github.com/RedHatWorkshops/argocd-getting-started/resources/manifests/argocd-instance
 ```
 
-> :bulb: You can **optionally** apply the [argocd-instance.yaml](resources/manifests/argocd-instance/argocd-instance.yaml) and [argocd-cluster-role.yaml ](resources/manifests/argocd-instance/argocd-cluster-role.yaml ) one at a time.
+> :heavy_exclamation_mark: If you're having trouble, take a look at the [Troubleshooting doc](resources/docs/troubleshooting.md#no-matches-for-kind-argocd)
+
+You can **optionally** apply the [argocd-instance.yaml](resources/manifests/argocd-instance/argocd-instance.yaml) and [argocd-cluster-role.yaml ](resources/manifests/argocd-instance/argocd-cluster-role.yaml ) one at a time.
 
 Once applied, you should see the following in the `argocd` namespace,
 when you run the `oc get pods -n argocd` command:
