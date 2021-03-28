@@ -1,57 +1,70 @@
-# Getting Started Guide With ArgoCD
+# Getting Started Guide
 
-This guide helps you get started with ArgoCD. This is a simple guide
-that takes you through the following steps:
+This guide helps you get started with the OpenShift GitOps Operaotr. This
+is a simple guide that takes you through the following steps:
 
-* [Installing the ArgoCD Operator](#installing-the-argocd-operator)
-* [Installing an ArgoCD Instance](#installing-an-argocd-instance)
+* [Installing the Operator](#installing-the-openshift-gitops-operator)
+* [Setting up ArgoCD](#setting-up-argocd)
+
 * [Deploying A Sample Application](#deploying-a-sample-application)
 
-The idea of this guide is that it should work on ANY OpenShift 4.6+
-cluster. So you'll need an OpenShift cluster or CRC. You will also
-need the `oc` cli utility.
+The idea of this guide is that it should work on ANY OpenShift 4.7+
+cluster. So you'll need access to an OpenShift cluster or CRC. You will
+also need the `oc` cli utility.
 
+# Installing the OpenShift GitOps Operator
 
-> :heavy_exclamation_mark: **NOTE** This won't work on a disconnected cluster.
+The easiest way to install the OpenShift GitOps Operator is via the
+OpenShift UI.
 
-# Installing the ArgoCD Operator
-
-The easiest way to install the ArgoCD Operator is via the OpenShift UI.
-
-![install-argocd-operator](resources/images/install-argo-operator.gif)
-
-To install it via the UI you simply...
+You can install the Operator via the UI in the Administrator Perspective:
 
 * Click on `Operators` drop down on the leftside navigation.
 * Click on `OperatorHub`
-* In the search box type `argocd`.
-* Select the `Argo CD` card (Note, that, this is a community supported operator).
-* Click on `Continue` on the 'Show Community Operator' information notification.
-* Click `Install` on the `Argo CD` installation dialog.
+* In the search box type `openshift gitops`.
+* Select the `Red Hat OpenShift GitOps` card.
+* Click `Install` on the `Red Hat OpenShift GitOps` installation dialog.
+* Accept all the defaults in the `Install Operator` page and click `Install`
 
 Another way to do this is to use the manifest directly. You can use the
-resources in this repo to install the ArgoCD Operator:
+resources in this repo to install the OpenShift GitOps Operator:
 
 ```shell
-oc apply -k https://github.com/RedHatWorkshops/argocd-getting-started/resources/manifests/argocd-operator-install
+oc apply -k https://github.com/RedHatWorkshops/argocd-getting-started/resources/manifests/operator-install
 ```
 
-This uses [kustomize](https://kustomize.io/) to load the manifests needed
-to install the Argo CD Operators. These 3 are:
+This uses [kustomize](https://kustomize.io/) to load the manifests needed to install the OpenShift GitOps Operator. There is only 1 that is needed:
 
-* [argocd-namespace.yaml](resources/manifests/argocd-operator-install/argocd-namespace.yaml)
-* [argocd-operatorgroup.yaml](resources/manifests/argocd-operator-install/argocd-operatorgroup.yaml)
-* [argocd-subscription.yaml](resources/manifests/argocd-operator-install/argocd-subscription.yaml)
+* [openshift-gitops-operator-sub.yaml](resources/manifests/operator-install/openshift-gitops-operator-sub.yaml)
 
-> :bulb: **NOTE**: You don't have to use `kustomize`. You can `oc apply -f` these files individually
+> :bulb: **NOTE**: You don't have to use `kustomize`. You can `oc apply -f` the file individually.
 
-Once you've installed the Operator, you can now deplay an ArgoCD Instance.
+The Operator is a "meta" Operator that installs both the ArgoCD Operator
+and Instance; and the Tekton Operator and Instance.
 
-# Installing an ArgoCD Instance
+Verify the installation by running `oc get pods -n openshift-gitops`. You should see the following output
 
-Once the Operator is installed, we need to tell it to deploy an instance
-of ArgoCD. First you need to make sure ArgoCD has the ability to
-administer the cluster.
+```shell
+$ oc get pods -n openshift-gitops
+NAME                                                    READY   STATUS    RESTARTS   AGE
+argocd-cluster-application-controller-6f548f74b-48bvf   1/1     Running   0          54s
+argocd-cluster-redis-6cf68d494d-9qqq4                   1/1     Running   0          54s
+argocd-cluster-repo-server-85b9d68f9b-4hj52             1/1     Running   0          54s
+argocd-cluster-server-78467b647-8lcv9                   1/1     Running   0          54s
+cluster-86f8d97979-lfdhv                                1/1     Running   0          56s
+kam-7ff6f58c-2jxkm                                      1/1     Running   0          55s
+```
+
+> :heavy_exclamation_mark: **NOTE**: It'll take some time so you may want to run `watch oc get pods -n openshift-gitops`
+
+# Setting up ArgoCD
+
+Once the Operator is installed, we need to make some customizations for this lab. First, we need to patch the manifest so that ArgoCD will ignore router differences (since every route will be differnet).
+
+```shell
+oc patch argocd argocd-cluster -n openshift-gitops --type=json \
+-p='[{"op": "add", "path": "/spec/resourceCustomizations", "value":"route.openshift.io/Route:\n  ignoreDifferences: |\n    jsonPointers:\n    - /spec/host\n"}]'
+```
 
 First, you create a `ClusterRoleBinding` that gives the `ServiceAccount`
 named `argocd-application-controller`, the `cluster-admin`
@@ -72,83 +85,7 @@ roleRef:
   name: cluster-admin
 ```
 
-
-Now you can install ArgoCD using the following manifest:
-
-```yaml
-apiVersion: argoproj.io/v1alpha1
-kind: ArgoCD
-metadata:
-  name: argocd
-  namespace: argocd
-spec:
-  version: v1.8.2
-  server:
-    route:
-      enabled: true
-  dex:
-    image: ghcr.io/dexidp/dex
-    openShiftOAuth: true
-    version: v2.27.0
-  resourceCustomizations: |
-    route.openshift.io/Route:
-      ignoreDifferences: |
-        jsonPointers:
-        - /spec/host
-  rbac:
-    defaultPolicy: ''
-    policy: |
-      g, system:cluster-admins, role:admin
-    scopes: '[groups]'
-  initialRepositories: |
-    - name:  argocd-getting-started
-      type: git 
-      url: https://github.com/RedHatWorkshops/argocd-getting-started
-```
-
-This manifest does some customization to work with OpenShift:
-
-* Creates the ArgoCD instance in the `argocd` namespace.
-* Creates a route (under: `.spec.server.route.enabled`)
-* Uses Dex to allow the mapping of OpenShift groups to ArgoCD groups (under: `.spec.dex`)
-* RBAC mapping of the `system:cluster-admins` OCP group to `role:admin` role in ArgoCD (under: `.spec.rbac`)
-* Initialize this repo for use later (under: `.spec.initialRepositories`)
-
-For more info, please see [the official ArgoCD Operator
-Doc](https://argocd-operator.readthedocs.io/en/latest/reference/argocd/)
-
-You can install both of these [using this
-repo](resources/manifests/argocd-instance) by running:
-
-> :bulb: You can **optionally** apply the [argocd-instance.yaml](resources/manifests/argocd-instance/argocd-instance.yaml) and [argocd-cluster-role.yaml ](resources/manifests/argocd-instance/argocd-cluster-role.yaml ) one at a time.
-
-```shell
-oc apply -k https://github.com/RedHatWorkshops/argocd-getting-started/resources/manifests/argocd-instance
-```
-
-> :heavy_exclamation_mark: If you're having trouble, take a look at the [Troubleshooting doc](resources/docs/troubleshooting.md#no-matches-for-kind-argocd)
-
-
-Once applied, you should see the following in the `argocd` namespace,
-when you run the `oc get pods -n argocd` command:
-
-```
-$ oc get pods -n argocd
-NAME                                             READY   STATUS    RESTARTS   AGE
-argocd-application-controller-774cc495f6-wd58h   1/1     Running   0          80m
-argocd-dex-server-5c549895f9-6srhw               1/1     Running   0          80m
-argocd-operator-67dbb7db5f-p7cbg                 1/1     Running   0          81m
-argocd-redis-6f7cfddbcb-c5kd5                    1/1     Running   0          80m
-argocd-repo-server-5454d6c459-sltk2              1/1     Running   0          80m
-argocd-server-5d998f7668-qn62f                   1/1     Running   0          80m
-```
-
-It may  take a while for these to rollout so you can wait for this by running:
-
-```
-oc rollout status deployment argocd-operator -n argocd && oc rollout status deployment argocd-server -n argocd
-```
-
+!!!!CHX!!!
 Once installed, get the route for the ArgoCD UI:
 
 ```shell
