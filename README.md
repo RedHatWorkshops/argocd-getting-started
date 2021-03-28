@@ -59,40 +59,43 @@ kam-7ff6f58c-2jxkm                                      1/1     Running   0     
 
 # Setting up ArgoCD
 
-Once the Operator is installed, we need to make some customizations for this lab. First, we need to patch the manifest so that ArgoCD will ignore router differences (since every route will be differnet).
+Once the Operator is installed, we need to make some customizations for
+this lab. First, we need to patch the manifest so that ArgoCD will ignore
+router differences (since every route will be differnet).
 
 ```shell
 oc patch argocd argocd-cluster -n openshift-gitops --type=json \
 -p='[{"op": "add", "path": "/spec/resourceCustomizations", "value":"route.openshift.io/Route:\n  ignoreDifferences: |\n    jsonPointers:\n    - /spec/host\n"}]'
 ```
 
-First, you create a `ClusterRoleBinding` that gives the `ServiceAccount`
-named `argocd-application-controller`, the `cluster-admin`
-`ClusterRole`. This allows ArgoCD to manage the cluster.
-
-```yaml
-kind: ClusterRoleBinding
-apiVersion: rbac.authorization.k8s.io/v1
-metadata:
-  name: argocd-application-controller-cluster-admin
-subjects:
-  - kind: ServiceAccount
-    name: argocd-application-controller
-    namespace: argocd
-roleRef:
-  apiGroup: rbac.authorization.k8s.io
-  kind: ClusterRole
-  name: cluster-admin
-```
-
-!!!!CHX!!!
-Once installed, get the route for the ArgoCD UI:
+Next, you need to give the ArgoCD Service account permission to
+make changes to your cluster. In practice, you will scope this to a
+specific namespace or a set of access. For this lab we will give it
+`cluster-admin`.
 
 ```shell
-oc get route argocd-server -n argocd -o jsonpath='{.spec.host}{"\n"}'
+oc adm policy add-cluster-role-to-user cluster-admin -z argocd-cluster-argocd-application-controller -n openshift-gitops
 ```
 
-You should be presented with this.
+Delete the ArgoCD server pod so that it can relaunch with the new set of permissions.
+
+```shell
+oc delete pods -l app.kubernetes.io/name=argocd-cluster-server -n openshift-gitops
+```
+
+The Operator installs the password in a secret. Extract this password to use to login to the ArgoCD instance.
+
+```shell
+oc extract secret/argocd-cluster-cluster -n openshift-gitops --to=-
+```
+
+To get the route for the ArgoCD UI:
+
+```shell
+oc get route argocd-cluster-server -n openshift-gitops -o jsonpath='{.spec.host}{"\n"}'
+```
+
+You should be presented with something that looks like this.
 
 ![argocd-login](resources/images/argocd-login.png)
 
