@@ -5,7 +5,6 @@ is a simple guide that takes you through the following steps:
 
 * [Installing the Operator](#installing-the-openshift-gitops-operator)
 * [Setting up ArgoCD](#setting-up-argocd)
-
 * [Deploying A Sample Application](#deploying-a-sample-application)
 
 The idea of this guide is that it should work on ANY OpenShift 4.7+
@@ -127,10 +126,10 @@ apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
   name: bgdk-app
-  namespace: argocd
+  namespace: openshift-gitops
 spec:
   destination:
-    namespace: argocd
+    namespace: openshift-gitops
     server: https://kubernetes.default.svc
   project: default
   source:
@@ -144,7 +143,7 @@ spec:
   sync:
     comparedTo:
       destination:
-        namespace: argocd
+        namespace: openshift-gitops
         server: https://kubernetes.default.svc
       source:
         path: resources/manifests/bgdk-yaml
