@@ -1,7 +1,7 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: bgdk-app
+  name: bgd-app
   namespace: openshift-gitops
 spec:
   destination:
@@ -9,7 +9,7 @@ spec:
     server: https://kubernetes.default.svc
   project: default
   source:
-    path: resources/manifests/bgdk-yaml
+    path: resources/manifests/bgd-yaml
     repoURL: https://github.com/RedHatWorkshops/argocd-getting-started
     targetRevision: main
   syncPolicy:
@@ -22,6 +22,6 @@ spec:
         namespace: openshift-gitops
         server: https://kubernetes.default.svc
       source:
-        path: resources/manifests/bgdk-yaml
+        path: resources/manifests/bgd-yaml
         repoURL: https://github.com/RedHatWorkshops/argocd-getting-started
         targetRevision: main
