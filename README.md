@@ -95,12 +95,12 @@ To get the route for the ArgoCD UI:
 oc get route argocd-cluster-server -n openshift-gitops -o jsonpath='{.spec.host}{"\n"}'
 ```
 
-You should be presented with something that looks like this.
+Once you visit the URL in your browser, you should be presented with
+something that looks like this.
 
 ![argocd-login](resources/images/argocd-login.png)
 
-Go ahead and click `LOGIN VIA OPENSHIFT`, and login as `kubeadmin`
-(or a user that has the `cluster-admin` role).
+Go ahead and login as `admin` with the password you've extracted above.
 
 You should see this screen:
 
